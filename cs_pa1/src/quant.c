@@ -132,10 +132,18 @@ void gemm_f32(const float *A, const float *B, float *C,
 void requantize_tensor(const int32_t *acc, int8_t *q, size_t n,
                        float scale_a, float scale_b, QParams out)
 {
-    (void)acc; (void)q; (void)n; (void)scale_a; (void)scale_b; (void)out;
-
-    /* TODO
+    /*
      * Convert each INT32 accumulator to an INT8 output using the supplied
      * scales and output parameters.
      */
+    float multiplier = (scale_a * scale_b) / out.scale;
+
+    for (size_t i = 0; i < n; i++) {
+        float code = rintf(multiplier * (float)acc[i])
+                   + out.zero_point;
+
+        code = fmaxf(-128.0f, fminf(code, 127.0f));
+
+        q[i] = (int8_t)code;
+    }
 }
