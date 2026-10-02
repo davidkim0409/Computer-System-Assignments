@@ -109,12 +109,22 @@ void gemm_i8(const int8_t *A, const int8_t *B, int32_t *C,
 void gemm_f32(const float *A, const float *B, float *C,
               int M, int K, int N)
 {
-    (void)A; (void)B; (void)C; (void)M; (void)K; (void)N;
-
-    /* TODO
+    /*
      * Multiply two FLOAT32 matrices. A is M×K, B is K×N, and C is M×N.
      * Everything is row-major (as in gemm_i8()).
      */
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < N; j++) {
+            float sum = 0.0f;
+
+            for (int t = 0; t < K; t++) {
+                sum += A[(size_t)i * K + t]
+                     * B[(size_t)t * N + j];
+            }
+
+            C[(size_t)i * N + j] = sum;
+        }
+    }
 }
 
 /* ---- puzzle 6 ----------------------------------------------------------- */
