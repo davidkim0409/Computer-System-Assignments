@@ -83,14 +83,25 @@ void gemm_i8(const int8_t *A, const int8_t *B, int32_t *C,
              int M, int K, int N,
              int32_t a_zp, int32_t b_zp)
 {
-    (void)A; (void)B; (void)C; (void)M; (void)K; (void)N;
-    (void)a_zp; (void)b_zp;
-
-    /* TODO
+    /*
      * Multiply two INT8 matrices. A is M×K, B is K×N, and C is M×N.
      * Everything is row-major: A[i][t] is A[i * K + t], B[t][j] is
      * B[t * N + j], and C[i][j] is C[i * N + j].
      */
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < N; j++) {
+            int32_t sum = 0;
+
+            for (int t = 0; t < K; t++) {
+                int32_t a = (int32_t)A[(size_t)i * K + t] - a_zp;
+                int32_t b = (int32_t)B[(size_t)t * N + j] - b_zp;
+
+                sum += a * b;
+            }
+
+            C[(size_t)i * N + j] = sum;
+        }
+    }
 }
 
 /* ---- puzzle 5 ----------------------------------------------------------- */
