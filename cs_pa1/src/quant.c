@@ -68,11 +68,13 @@ void quantize_tensor(const float *x, int8_t *q, size_t n, QParams p)
 
 void dequantize_tensor(const int8_t *q, float *x, size_t n, QParams p)
 {
-    (void)q; (void)x; (void)n; (void)p;
-
     /* TODO
      * Convert each code back to Float32.
      */
+    for (size_t i = 0; i < n; i++) {
+        int32_t centered = (int32_t)q[i] - p.zero_point;
+        x[i] = centered * p.scale;
+    }
 }
 
 /* ---- puzzle 4 ----------------------------------------------------------- */
