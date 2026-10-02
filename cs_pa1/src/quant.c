@@ -24,6 +24,9 @@
 
 QParams qp_from_minmax(float min, float max)
 {
+    /* TODO
+     * Choose and return the quantization parameters for the range [min, max].
+     */
     float r_min = fmin(min, 0.0f);
     float r_max = fmax(max, 0.0f);
 
@@ -48,12 +51,17 @@ QParams qp_from_minmax(float min, float max)
 
 void quantize_tensor(const float *x, int8_t *q, size_t n, QParams p)
 {
-    (void)x; (void)q; (void)n; (void)p;
-
     /* TODO
      * Convert each Float32 element to an INT8 code using the supplied
      * quantization parameters.
      */
+    for (size_t i = 0; i < n; i++) {
+        float code = rintf(x[i] / p.scale) + p.zero_point;
+
+        code = fmaxf(-128.0f, fminf(code, 127.0f));
+
+        q[i] = (int8_t)code;
+    }
 }
 
 /* ---- puzzle 3 ----------------------------------------------------------- */
