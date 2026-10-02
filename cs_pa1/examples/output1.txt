@@ -1,0 +1,11 @@
+shapes: A is 2x4, B is 4x3, C is 2x3
+qp_from_minmax/A(-1.000000, 3.000000) = {scale=0.01568628, zero_point=-64}
+quantize_tensor/A = [-128, -64, 0, 127, -32, -96, 79, 32]
+qp_from_minmax/B(-0.500000, 1.500000) = {scale=0.00784314, zero_point=-64}
+quantize_tensor/B = [-32, -96, 0, -128, 95, -64, 32, -48, 127, 95, -128, -16]
+gemm_i8 = [34465, -9152, 17296, 32064, -9968, 33969]
+gemm_f32 = [4.250000, -1.125000, 2.125000, 3.937500, -1.218750, 4.187500]
+qp_from_minmax/acc(-1.226359, 4.240216) = {scale=0.02143755, zero_point=-71}
+requantize_tensor = [127, -124, 28, 113, -128, 124]
+dequantize_tensor = [4.244635, -1.136190, 2.122318, 3.944509, -1.221940, 4.180322]
+max abs error vs gemm_f32 = 0.011190  (requantization step = 0.021438)
