@@ -24,13 +24,23 @@
 
 QParams qp_from_minmax(float min, float max)
 {
-    (void)min; (void)max;
+    float r_min = fmin(min, 0.0f);
+    float r_max = fmax(max, 0.0f);
 
-    /* TODO
-     * Choose and return the quantization parameters for the range [min, max].
-     */
+    if (r_min == r_max) {
+        QParams p = {1.0f, 0};
+        return p;
+    }
 
-    QParams p = {1.0f, 0};
+    float s = (r_max - r_min) / 255.0f;
+    if (s == 0.0f) {
+        QParams p = {1.0f, 0};
+        return p;
+    }
+
+    float z = rintf(-128.0f - r_min / s);
+
+    QParams p = {s, (int32_t)z};
     return p;
 }
 
