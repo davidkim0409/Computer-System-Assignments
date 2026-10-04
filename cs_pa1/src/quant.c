@@ -51,6 +51,8 @@ QParams qp_from_minmax(float min, float max)
 
     // Compute z
     float z = rintf(-128.0f - r_min / s);
+    // Clamp z to say within [-128, 127]
+    z = fmaxf(-128.0f, fminf(z, 127.0f));
 
     // Return p; type-cast z into int32_t
     QParams p = {s, (int32_t)z};
